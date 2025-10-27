@@ -41,5 +41,6 @@ GOOGLE_API_KEY=tu_clave_api_de_google
 
 Para ejecutar el agente de LangGraph:
 ```bash
-langgraph dev
+uv run langgraph dev
 ```
+
