@@ -21,3 +21,6 @@ uv sync --python 3.12
 # en un proyecto existente
 uv init .
 uv pip install -r requirements.txt
+
+# run the agent
+uv run langgraph dev
