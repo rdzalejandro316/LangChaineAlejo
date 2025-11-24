@@ -1,14 +1,9 @@
-from langchain_core.messages import AIMessage
+from langchain_core.messages import AIMessage, SystemMessage
 from langgraph.graph import MessagesState
 from langgraph.graph import StateGraph, START, END
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain.agents import create_agent
 
 llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
-agent = create_agent(
-    model=llm,
-    system_prompt="You are a helpful assistant"
-)
 
 class State(MessagesState):
     customer_name: str
@@ -25,9 +20,16 @@ def node_1(state: State):
     else:
         new_state["my_age"] = 20
 
-    history = state["messages"]
-    ai_message = agent.invoke({"messages": history})
-    new_state["messages"] = [ai_message]
+    history = state.get("messages", [])
+    
+    # Solo invocar el LLM si hay mensajes en el historial
+    if history:
+        # Agregar mensaje de sistema al principio si no existe
+        messages = [SystemMessage(content="You are a helpful assistant")] + history
+        print("*********************************:", messages)
+        ai_message = llm.invoke(messages)
+        new_state["messages"] = [ai_message]
+    
     return new_state
 
 builder = StateGraph(State)

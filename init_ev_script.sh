@@ -23,4 +23,4 @@ uv init .
 uv pip install -r requirements.txt
 
 # run the agent
-uv run langgraph dev
+uv run langgraph dev --allow-blocking
